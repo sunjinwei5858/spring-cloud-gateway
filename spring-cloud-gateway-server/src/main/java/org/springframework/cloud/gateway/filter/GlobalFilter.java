@@ -21,6 +21,7 @@ import reactor.core.publisher.Mono;
 import org.springframework.web.server.ServerWebExchange;
 
 /**
+ * gateway的全局过滤器
  * Contract for interception-style, chained processing of Web requests that may be used to
  * implement cross-cutting, application-agnostic requirements such as security, timeouts,
  * and others.
