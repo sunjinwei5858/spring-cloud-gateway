@@ -36,6 +36,8 @@ import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.G
 import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR;
 
 /**
+ * 实现了spring-webflux的映射器接口 HandlerMapping接口
+ * RoutePredicateHandlerMapping用于匹配具体的Route，并返回处理Route的FilteringWebHandler
  * @author Spencer Gibb
  */
 public class RoutePredicateHandlerMapping extends AbstractHandlerMapping {
@@ -48,6 +50,14 @@ public class RoutePredicateHandlerMapping extends AbstractHandlerMapping {
 
 	private final ManagementPortType managementPortType;
 
+	/**
+	 * 构造函数的两个参数：
+	 * FilteringWebHandler网关过滤器和RouteLocator路由定位器
+	 * @param webHandler
+	 * @param routeLocator
+	 * @param globalCorsProperties
+	 * @param environment
+	 */
 	public RoutePredicateHandlerMapping(FilteringWebHandler webHandler,
 			RouteLocator routeLocator, GlobalCorsProperties globalCorsProperties,
 			Environment environment) {
@@ -75,6 +85,11 @@ public class RoutePredicateHandlerMapping extends AbstractHandlerMapping {
 		return environment.getProperty(prefix + "port", Integer.class);
 	}
 
+	/**
+	 * 该方法会在getHandler当中进行调用
+	 * @param exchange
+	 * @return
+	 */
 	@Override
 	protected Mono<?> getHandlerInternal(ServerWebExchange exchange) {
 		// don't handle requests on management port if set and different than server port
@@ -124,6 +139,11 @@ public class RoutePredicateHandlerMapping extends AbstractHandlerMapping {
 		return out.toString();
 	}
 
+	/**
+	 * 寻找route
+	 * @param exchange
+	 * @return
+	 */
 	protected Mono<Route> lookupRoute(ServerWebExchange exchange) {
 		return this.routeLocator.getRoutes()
 				// individually filter routes so that filterWhen error delaying is not a
